@@ -1,12 +1,6 @@
 import { useRef } from "react";
 
-const CUTENESS_LABELS = [
-  "Plain",
-  "A little cute",
-  "Pretty cute",
-  "Very cute",
-  "Maximum cuteness!",
-];
+const CUTENESS_LABELS = ["Plain", "A little cute", "Pretty cute", "Very cute", "Maximum cuteness!"];
 
 const CUTENESS_EMOJI = ["", "\u{1F33C}", "\u{1F338}", "\u{1F496}", "\u{2728}\u{1F496}\u{2728}"];
 
@@ -35,7 +29,7 @@ export function ImageUpload({
           const reader = new FileReader();
           reader.onload = () => resolve(reader.result as string);
           reader.readAsDataURL(file);
-        })
+        }),
     );
     Promise.all(readers).then((dataUrls) => {
       onImagesChange([...images, ...dataUrls]);
@@ -65,10 +59,7 @@ export function ImageUpload({
         onChange={handleFiles}
         style={{ display: "none" }}
       />
-      <button
-        className="btn"
-        onClick={() => inputRef.current?.click()}
-      >
+      <button className="btn" onClick={() => inputRef.current?.click()}>
         {images.length === 0 ? "\u{1F4F7} Choose Photos" : "\u{2728} Add More"}
       </button>
 
@@ -85,9 +76,7 @@ export function ImageUpload({
 
       {/* Cuteness slider */}
       <div className="cuteness-slider">
-        <label className="cuteness-label">
-          Cuteness Level {CUTENESS_EMOJI[cuteness]}
-        </label>
+        <label className="cuteness-label">Cuteness Level {CUTENESS_EMOJI[cuteness]}</label>
         <input
           type="range"
           min={0}

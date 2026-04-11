@@ -29,8 +29,16 @@ const starPath = (cx: number, cy: number, r: number) =>
   `M${cx},${cy - r} L${cx + r * 0.3},${cy - r * 0.3} L${cx + r},${cy} L${cx + r * 0.3},${cy + r * 0.3} L${cx},${cy + r} L${cx - r * 0.3},${cy + r * 0.3} L${cx - r},${cy} L${cx - r * 0.3},${cy - r * 0.3}Z`;
 
 const CONFETTI_COLORS = [
-  "#f06292", "#ec407a", "#f48fb1", "#ce93d8", "#ba68c8",
-  "#ffab91", "#ff8a65", "#ffd54f", "#aed581", "#80deea",
+  "#f06292",
+  "#ec407a",
+  "#f48fb1",
+  "#ce93d8",
+  "#ba68c8",
+  "#ffab91",
+  "#ff8a65",
+  "#ffd54f",
+  "#aed581",
+  "#80deea",
 ];
 
 interface Props {
@@ -43,7 +51,7 @@ export function CollageView({ images, onBack, cuteness }: Props) {
   const collageRef = useRef<HTMLDivElement>(null);
   const [exporting, setExporting] = useState(false);
   const [seed, setSeed] = useState(() => Math.floor(Math.random() * 100000));
-  const [showConfetti, setShowConfetti] = useState(false);
+  const [confettiPieces, setConfettiPieces] = useState<React.CSSProperties[]>([]);
 
   // Derived style settings from cuteness level
   const useGradient = cuteness >= 1;
@@ -62,12 +70,10 @@ export function CollageView({ images, onBack, cuteness }: Props) {
 
   const slots: ShapeSlot[] = useMemo(
     () => generateHearts(images.length, seed),
-    [images.length, seed]
+    [images.length, seed],
   );
 
-  const [assignment, setAssignment] = useState<number[]>(() =>
-    shuffle(images.map((_, i) => i))
-  );
+  const [assignment, setAssignment] = useState<number[]>(() => shuffle(images.map((_, i) => i)));
 
   const handleArmanio = useCallback(() => {
     setSeed(Math.floor(Math.random() * 100000));
@@ -79,8 +85,18 @@ export function CollageView({ images, onBack, cuteness }: Props) {
       return next;
     });
     if (useConfetti) {
-      setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 2200);
+      const pieces = Array.from({ length: 40 }, (_, i) => ({
+        left: `${Math.random() * 100}%`,
+        backgroundColor: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+        animationDelay: `${Math.random() * 0.8}s`,
+        animationDuration: `${1.5 + Math.random() * 1}s`,
+        width: `${6 + Math.random() * 8}px`,
+        height: `${6 + Math.random() * 8}px`,
+        borderRadius: Math.random() > 0.5 ? "50%" : "2px",
+        transform: `rotate(${Math.random() * 360}deg)`,
+      }));
+      setConfettiPieces(pieces);
+      setTimeout(() => setConfettiPieces([]), 2200);
     }
   }, [useConfetti]);
 
@@ -134,11 +150,7 @@ export function CollageView({ images, onBack, cuteness }: Props) {
       </button>
 
       <div className="collage-wrapper" ref={collageRef}>
-        <svg
-          viewBox="0 0 100 100"
-          className="collage-svg"
-          xmlns="http://www.w3.org/2000/svg"
-        >
+        <svg viewBox="0 0 100 100" className="collage-svg" xmlns="http://www.w3.org/2000/svg">
           <defs>
             {useGradient && (
               <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -149,7 +161,13 @@ export function CollageView({ images, onBack, cuteness }: Props) {
             )}
             {useShadows && (
               <filter id="heart-shadow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0.3" dy="0.5" stdDeviation="0.8" floodColor="#8b3a62" floodOpacity="0.3" />
+                <feDropShadow
+                  dx="0.3"
+                  dy="0.5"
+                  stdDeviation="0.8"
+                  floodColor="#8b3a62"
+                  floodOpacity="0.3"
+                />
               </filter>
             )}
             {slots.map((slot, i) => (
@@ -209,16 +227,17 @@ export function CollageView({ images, onBack, cuteness }: Props) {
           })}
 
           {/* Sparkles */}
-          {useSparkles && SPARKLES.map((s, i) => (
-            <path
-              key={`sparkle-${i}`}
-              className="sparkle"
-              d={starPath(s.x, s.y, s.size)}
-              fill="#ffe4a0"
-              opacity={0.8}
-              style={{ animationDelay: `${s.delay}s` }}
-            />
-          ))}
+          {useSparkles &&
+            SPARKLES.map((s, i) => (
+              <path
+                key={`sparkle-${i}`}
+                className="sparkle"
+                d={starPath(s.x, s.y, s.size)}
+                fill="#ffe4a0"
+                opacity={0.8}
+                style={{ animationDelay: `${s.delay}s` }}
+              />
+            ))}
 
           {/* Corner flourishes */}
           {useFlourishes && (
@@ -255,33 +274,16 @@ export function CollageView({ images, onBack, cuteness }: Props) {
         <button className="btn btn-shuffle" onClick={handleArmanio}>
           &hearts; Armanio! &hearts;
         </button>
-        <button
-          className="btn btn-primary"
-          onClick={handleDownload}
-          disabled={exporting}
-        >
+        <button className="btn btn-primary" onClick={handleDownload} disabled={exporting}>
           {exporting ? "Exporting..." : "\u{1F4BE} Download"}
         </button>
       </div>
 
       {/* Confetti */}
-      {showConfetti && (
+      {confettiPieces.length > 0 && (
         <div className="confetti-container">
-          {Array.from({ length: 40 }, (_, i) => (
-            <div
-              key={i}
-              className="confetti-piece"
-              style={{
-                left: `${Math.random() * 100}%`,
-                backgroundColor: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
-                animationDelay: `${Math.random() * 0.8}s`,
-                animationDuration: `${1.5 + Math.random() * 1}s`,
-                width: `${6 + Math.random() * 8}px`,
-                height: `${6 + Math.random() * 8}px`,
-                borderRadius: Math.random() > 0.5 ? "50%" : "2px",
-                transform: `rotate(${Math.random() * 360}deg)`,
-              }}
-            />
+          {confettiPieces.map((style, i) => (
+            <div key={i} className="confetti-piece" style={style} />
           ))}
         </div>
       )}

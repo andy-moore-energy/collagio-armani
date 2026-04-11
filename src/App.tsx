@@ -19,11 +19,7 @@ function App() {
       onCutenessChange={setCuteness}
     />
   ) : (
-    <CollageView
-      images={images}
-      onBack={() => setScreen("upload")}
-      cuteness={cuteness}
-    />
+    <CollageView images={images} onBack={() => setScreen("upload")} cuteness={cuteness} />
   );
 }
 

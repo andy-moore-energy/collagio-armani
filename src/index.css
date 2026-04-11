@@ -5,7 +5,11 @@
 }
 
 body {
-  font-family: 'Quicksand', system-ui, -apple-system, sans-serif;
+  font-family:
+    "Quicksand",
+    system-ui,
+    -apple-system,
+    sans-serif;
   background: linear-gradient(135deg, #fff0f5 0%, #fce4ec 30%, #f3e5f5 70%, #fff0f5 100%);
   background-attachment: fixed;
   color: #6d4c5e;
