@@ -1,0 +1,334 @@
+.screen {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Title */
+h1 {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: #d6336c;
+  margin-bottom: 2px;
+  text-shadow: 0 2px 8px rgba(214, 51, 108, 0.15);
+  animation: floatTitle 3s ease-in-out infinite;
+}
+
+@keyframes floatTitle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+h1 .heart-icon {
+  display: inline-block;
+  animation: heartbeat 1.2s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: #b07d9e;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+h2 {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.6rem;
+  color: #d6336c;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(135deg, #fce4ec, #f8bbd0);
+  color: #ad1457;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 12px rgba(236, 64, 122, 0.15);
+  letter-spacing: 0.3px;
+}
+
+.btn:hover {
+  background: linear-gradient(135deg, #f8bbd0, #f48fb1);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 16px rgba(236, 64, 122, 0.25);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #ec407a, #d81b60);
+  color: #fff;
+  box-shadow: 0 3px 12px rgba(216, 27, 96, 0.3);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #d81b60, #c2185b);
+  box-shadow: 0 5px 16px rgba(216, 27, 96, 0.4);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-shuffle {
+  background: linear-gradient(135deg, #f06292, #ec407a);
+  color: #fff;
+  font-size: 1.1rem;
+  box-shadow: 0 3px 12px rgba(236, 64, 122, 0.3);
+}
+
+.btn-shuffle:hover {
+  background: linear-gradient(135deg, #ec407a, #e91e63);
+  box-shadow: 0 5px 16px rgba(236, 64, 122, 0.4);
+}
+
+.btn-armanio {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  padding: 16px;
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.6rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #f06292, #e91e63, #ec407a);
+  background-size: 200% 200%;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: #b07d9e;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 12px;
+  padding: 4px 0;
+  transition: color 0.15s;
+}
+
+.back-btn:hover {
+  color: #d6336c;
+}
+
+/* Image upload */
+.thumbnail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.thumbnail {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid #f8bbd0;
+  box-shadow: 0 2px 8px rgba(236, 64, 122, 0.1);
+  transition: transform 0.15s;
+}
+
+.thumbnail:hover {
+  transform: scale(1.03);
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.remove-btn {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  background: rgba(216, 27, 96, 0.7);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.remove-btn:hover {
+  background: rgba(216, 27, 96, 0.9);
+}
+
+/* Collage */
+.collage-wrapper {
+  border-radius: 16px;
+  overflow: hidden;
+  margin: 12px 0;
+  box-shadow: 0 8px 32px rgba(216, 27, 96, 0.2), 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.collage-svg {
+  width: 100%;
+  display: block;
+}
+
+/* Heart pop-in animation (opacity only — CSS transform breaks SVG transform attribute) */
+.heart-group {
+  animation: popIn 0.35s ease-out both;
+}
+
+@keyframes popIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+/* Confetti */
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-10px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(120vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -10px;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  animation: confettiFall 2s ease-in forwards;
+}
+
+/* Sparkle decorations on collage */
+.sparkle {
+  animation: sparkleGlow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes sparkleGlow {
+  0% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+/* Photo count badge */
+.photo-count {
+  font-size: 0.95rem;
+  color: #b07d9e;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.photo-count strong {
+  color: #d6336c;
+}
+
+/* Cuteness slider */
+.cuteness-slider {
+  margin: 20px 0 8px;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 16px;
+  border: 1px solid #f8bbd0;
+}
+
+.cuteness-label {
+  display: block;
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #d6336c;
+  margin-bottom: 8px;
+}
+
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #e0e0e0, #f8bbd0, #f06292, #ec407a, #d81b60);
+  outline: none;
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #ec407a;
+  box-shadow: 0 2px 8px rgba(236, 64, 122, 0.3);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+.slider::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #ec407a;
+  box-shadow: 0 2px 8px rgba(236, 64, 122, 0.3);
+  cursor: pointer;
+}
+
+.cuteness-desc {
+  font-size: 0.85rem;
+  color: #b07d9e;
+  margin-top: 6px;
+  font-weight: 500;
+}
