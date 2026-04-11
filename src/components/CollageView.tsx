@@ -1,6 +1,6 @@
 import { useRef, useState, useMemo, useCallback } from "react";
-import { generateHearts } from "../templates";
-import type { ShapeSlot } from "../templates";
+import { generateHearts, generateBackgroundDecorations, heartPath } from "../templates";
+import type { ShapeSlot, BgDecoration } from "../templates";
 import { shuffle } from "../utils/shuffle";
 import { exportCollageAsPng } from "../utils/exportPng";
 
@@ -68,9 +68,16 @@ export function CollageView({ images, onBack, cuteness }: Props) {
   const strokeWidth = useRoseGold ? 1.8 : 1;
   const exportBg = "#ff69b4";
 
+  const useDecorations = cuteness >= 1;
+
   const slots: ShapeSlot[] = useMemo(
     () => generateHearts(images.length, seed),
     [images.length, seed],
+  );
+
+  const bgDecorations: BgDecoration[] = useMemo(
+    () => (useDecorations ? generateBackgroundDecorations(seed) : []),
+    [seed, useDecorations],
   );
 
   const [assignment, setAssignment] = useState<number[]>(() => shuffle(images.map((_, i) => i)));
@@ -183,6 +190,34 @@ export function CollageView({ images, onBack, cuteness }: Props) {
 
           {/* Background */}
           <rect width="100" height="100" fill={useGradient ? "url(#bg-gradient)" : bgColor!} />
+
+          {/* Background decorations */}
+          {bgDecorations.map((d, i) => (
+            <g
+              key={`bg-${i}`}
+              transform={`translate(${d.x}, ${d.y}) rotate(${d.rotation})`}
+              opacity={d.opacity}
+            >
+              {d.shape === "heart" && (
+                <path d={heartPath} fill={d.color} transform={`scale(${d.size / 100})`} />
+              )}
+              {d.shape === "star" && <path d={starPath(0, 0, d.size)} fill={d.color} />}
+              {d.shape === "dot" && <circle r={d.size * 0.5} fill={d.color} />}
+              {d.shape === "flower" && (
+                <g fill={d.color}>
+                  {[0, 72, 144, 216, 288].map((angle) => (
+                    <circle
+                      key={angle}
+                      cx={Math.cos((angle * Math.PI) / 180) * d.size * 0.4}
+                      cy={Math.sin((angle * Math.PI) / 180) * d.size * 0.4}
+                      r={d.size * 0.35}
+                    />
+                  ))}
+                  <circle r={d.size * 0.25} fill="#ffe4a0" opacity={0.6} />
+                </g>
+              )}
+            </g>
+          ))}
 
           {/* Hearts */}
           {slots.map((slot, i) => {

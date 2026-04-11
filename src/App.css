@@ -151,6 +151,45 @@ h2 {
 }
 
 /* Image upload */
+.thumbnail-area {
+  position: relative;
+  min-height: 60px;
+}
+
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: rgba(255, 240, 245, 0.85);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.unicorn-spinner {
+  font-size: 2.5rem;
+  animation: unicornFly 1.2s linear infinite;
+}
+
+@keyframes unicornFly {
+  0% {
+    transform: rotate(0deg) translateX(20px) rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg) translateX(20px) rotate(-360deg);
+  }
+}
+
+.loading-text {
+  font-family: "Dancing Script", cursive;
+  font-size: 1.1rem;
+  color: #d6336c;
+  font-weight: 700;
+}
+
 .thumbnail-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
