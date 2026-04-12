@@ -8,7 +8,7 @@ export interface ShapeSlot {
 }
 
 export interface BgDecoration {
-  shape: "heart" | "star" | "dot" | "flower";
+  shape: "heart" | "star" | "dot" | "flower" | "sparkle";
   x: number;
   y: number;
   size: number;
@@ -168,13 +168,16 @@ const BG_COLORS = [
   "#ffe4a0", // warm yellow
   "#ffb6c1", // light pink
   "#c9a0dc", // lavender
+  "#ffa6d5", // bright pink
+  "#a8d8ea", // soft blue
+  "#f8e8ff", // pale lilac
 ];
 
-const SHAPES: BgDecoration["shape"][] = ["heart", "star", "dot", "flower"];
+const SHAPES: BgDecoration["shape"][] = ["heart", "star", "dot", "flower", "sparkle"];
 
 export function generateBackgroundDecorations(seed: number): BgDecoration[] {
   const rand = seededRandom(seed + 9999);
-  const count = 35;
+  const count = 55;
   const decorations: BgDecoration[] = [];
 
   for (let i = 0; i < count; i++) {
@@ -182,9 +185,9 @@ export function generateBackgroundDecorations(seed: number): BgDecoration[] {
       shape: SHAPES[Math.floor(rand() * SHAPES.length)],
       x: rand() * 100,
       y: rand() * 100,
-      size: 2.5 + rand() * 3.5,
+      size: 2.5 + rand() * 5,
       rotation: rand() * 360,
-      opacity: 0.12 + rand() * 0.13,
+      opacity: 0.15 + rand() * 0.22,
       color: BG_COLORS[Math.floor(rand() * BG_COLORS.length)],
     });
   }

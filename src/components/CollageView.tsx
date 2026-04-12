@@ -52,6 +52,8 @@ export function CollageView({ images, onBack, cuteness }: Props) {
   const [exporting, setExporting] = useState(false);
   const [seed, setSeed] = useState(() => Math.floor(Math.random() * 100000));
   const [confettiPieces, setConfettiPieces] = useState<React.CSSProperties[]>([]);
+  const [heartScale, setHeartScale] = useState(1.0);
+  const [scaling, setScaling] = useState(false);
 
   // Derived style settings from cuteness level
   const useGradient = cuteness >= 1;
@@ -157,14 +159,26 @@ export function CollageView({ images, onBack, cuteness }: Props) {
       </button>
 
       <div className="collage-wrapper" ref={collageRef}>
+        {scaling && (
+          <div className="loading-overlay">
+            <div className="unicorn-spinner">{"\u{1F984}"}</div>
+          </div>
+        )}
         <svg viewBox="0 0 100 100" className="collage-svg" xmlns="http://www.w3.org/2000/svg">
           <defs>
             {useGradient && (
-              <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#ff69b4" />
-                <stop offset="50%" stopColor="#ff85c8" />
-                <stop offset="100%" stopColor="#e991c9" />
-              </linearGradient>
+              <>
+                <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#ff69b4" />
+                  <stop offset="35%" stopColor="#ff85c8" />
+                  <stop offset="65%" stopColor="#f472b6" />
+                  <stop offset="100%" stopColor="#e879a8" />
+                </linearGradient>
+                <radialGradient id="bg-glow" cx="50%" cy="40%" r="60%">
+                  <stop offset="0%" stopColor="#ffc0e0" stopOpacity="0.5" />
+                  <stop offset="100%" stopColor="#ff69b4" stopOpacity="0" />
+                </radialGradient>
+              </>
             )}
             {useShadows && (
               <filter id="heart-shadow" x="-20%" y="-20%" width="140%" height="140%">
@@ -190,6 +204,7 @@ export function CollageView({ images, onBack, cuteness }: Props) {
 
           {/* Background */}
           <rect width="100" height="100" fill={useGradient ? "url(#bg-gradient)" : bgColor!} />
+          {useGradient && <rect width="100" height="100" fill="url(#bg-glow)" />}
 
           {/* Background decorations */}
           {bgDecorations.map((d, i) => (
@@ -216,18 +231,30 @@ export function CollageView({ images, onBack, cuteness }: Props) {
                   <circle r={d.size * 0.25} fill="#ffe4a0" opacity={0.6} />
                 </g>
               )}
+              {d.shape === "sparkle" && (
+                <path
+                  d={`M0,${-d.size} L${d.size * 0.15},${-d.size * 0.15} L${d.size},0 L${d.size * 0.15},${d.size * 0.15} L0,${d.size} L${-d.size * 0.15},${d.size * 0.15} L${-d.size},0 L${-d.size * 0.15},${-d.size * 0.15}Z`}
+                  fill={d.color}
+                />
+              )}
             </g>
           ))}
 
           {/* Hearts */}
           {slots.map((slot, i) => {
             const imgIndex = assignment[i];
+            const cx = slot.x + slot.width / 2;
+            const cy = slot.y + slot.height / 2;
+            const scaleTransform =
+              heartScale !== 1
+                ? `translate(${cx}, ${cy}) scale(${heartScale}) translate(${-cx}, ${-cy}) `
+                : "";
             return (
               <g
                 key={`${seed}-${i}`}
                 className={usePopIn ? "heart-group" : undefined}
                 style={usePopIn ? { animationDelay: `${i * 0.04}s` } : undefined}
-                transform={`translate(${slot.x}, ${slot.y})${slot.rotation ? ` rotate(${slot.rotation}, ${slot.width / 2}, ${slot.height / 2})` : ""}`}
+                transform={`${scaleTransform}translate(${slot.x}, ${slot.y})${slot.rotation ? ` rotate(${slot.rotation}, ${slot.width / 2}, ${slot.height / 2})` : ""}`}
                 filter={useShadows ? "url(#heart-shadow)" : undefined}
               >
                 <foreignObject
@@ -288,27 +315,52 @@ export function CollageView({ images, onBack, cuteness }: Props) {
             </g>
           )}
 
-          {/* Frame */}
+          {/* Frame — filled to edge using even-odd rule */}
           {useScalloped ? (
-            <path d={scallops} fill="none" stroke={strokeColor} strokeWidth="1.2" />
+            <path d={`M0,0 H100 V100 H0 Z ${scallops}`} fill={strokeColor} fillRule="evenodd" />
           ) : (
-            <rect
-              x={0.5}
-              y={0.5}
-              width={99}
-              height={99}
-              fill="none"
-              stroke={strokeColor}
-              strokeWidth={1}
+            <path
+              d="M0,0 H100 V100 H0 Z M1.5,1.5 H98.5 V98.5 H1.5 Z"
+              fill={strokeColor}
+              fillRule="evenodd"
             />
           )}
         </svg>
       </div>
 
       <div className="actions">
-        <button className="btn btn-shuffle" onClick={handleArmanio}>
-          &hearts; Armanio! &hearts;
+        <button
+          className="btn"
+          onClick={() => {
+            setScaling(true);
+            requestAnimationFrame(() => {
+              setHeartScale((s) => Math.max(0.5, +(s - 0.2).toFixed(1)));
+              setTimeout(() => setScaling(false), 400);
+            });
+          }}
+          disabled={heartScale <= 0.5 || scaling}
+        >
+          Shrink!
         </button>
+        <button className="btn btn-shuffle btn-nowrap" onClick={handleArmanio}>
+          <span className="nowrap">&hearts;&nbsp;Armanio</span>{" "}
+          <span className="nowrap">Again!&nbsp;&hearts;</span>
+        </button>
+        <button
+          className="btn"
+          onClick={() => {
+            setScaling(true);
+            requestAnimationFrame(() => {
+              setHeartScale((s) => Math.min(2, +(s + 0.2).toFixed(1)));
+              setTimeout(() => setScaling(false), 400);
+            });
+          }}
+          disabled={heartScale >= 2 || scaling}
+        >
+          Grow!
+        </button>
+      </div>
+      <div className="actions">
         <button className="btn btn-primary" onClick={handleDownload} disabled={exporting}>
           {exporting ? "Exporting..." : "\u{1F4BE} Download"}
         </button>

@@ -110,6 +110,15 @@ h2 {
   box-shadow: 0 5px 16px rgba(236, 64, 122, 0.4);
 }
 
+.btn-nowrap {
+  min-width: 0;
+  font-size: clamp(0.8rem, 3.5vw, 1.1rem);
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
 .btn-armanio {
   display: block;
   width: 100%;
@@ -176,10 +185,10 @@ h2 {
 
 @keyframes unicornFly {
   0% {
-    transform: rotate(0deg) translateX(20px) rotate(0deg);
+    transform: rotate(0deg) translateX(20px) rotate(180deg);
   }
   100% {
-    transform: rotate(360deg) translateX(20px) rotate(-360deg);
+    transform: rotate(-360deg) translateX(20px) rotate(180deg);
   }
 }
 
@@ -242,6 +251,7 @@ h2 {
 
 /* Collage */
 .collage-wrapper {
+  position: relative;
   border-radius: 16px;
   overflow: hidden;
   margin: 12px 0;
@@ -395,4 +405,92 @@ h2 {
   color: #b07d9e;
   margin-top: 6px;
   font-weight: 500;
+}
+
+/* Install prompt */
+.install-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 900;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 50px;
+  font-family: "Quicksand", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(135deg, #ec407a, #d81b60);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(216, 27, 96, 0.35);
+  transition: all 0.2s ease;
+}
+
+.install-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(216, 27, 96, 0.45);
+}
+
+.ios-guide-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.ios-guide {
+  background: #fff;
+  border-radius: 20px;
+  padding: 28px 24px;
+  max-width: 340px;
+  width: 100%;
+  text-align: left;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+.ios-guide-title {
+  font-family: "Dancing Script", cursive;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #d6336c;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.ios-guide-steps {
+  padding-left: 20px;
+  margin: 0 0 20px;
+  line-height: 1.8;
+  color: #6d4c5e;
+  font-size: 0.95rem;
+}
+
+.ios-share-icon {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.ios-guide-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.ios-guide-dismiss {
+  background: none;
+  border: none;
+  font-family: "Quicksand", sans-serif;
+  font-size: 0.8rem;
+  color: #b07d9e;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.ios-guide-dismiss:hover {
+  color: #d6336c;
 }
