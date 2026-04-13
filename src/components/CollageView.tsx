@@ -257,24 +257,15 @@ export function CollageView({ images, onBack, cuteness }: Props) {
                 transform={`${scaleTransform}translate(${slot.x}, ${slot.y})${slot.rotation ? ` rotate(${slot.rotation}, ${slot.width / 2}, ${slot.height / 2})` : ""}`}
                 filter={useShadows ? "url(#heart-shadow)" : undefined}
               >
-                <foreignObject
+                <image
                   x={0}
                   y={0}
                   width={slot.width}
                   height={slot.height}
+                  href={images[imgIndex]}
+                  preserveAspectRatio="xMidYMid slice"
                   clipPath={`url(#clip-${i})`}
-                >
-                  <img
-                    src={images[imgIndex]}
-                    alt=""
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      display: "block",
-                    }}
-                  />
-                </foreignObject>
+                />
                 <path
                   d={slot.svgPath}
                   fill="none"

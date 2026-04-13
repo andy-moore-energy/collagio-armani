@@ -5,6 +5,7 @@ export async function exportCollageAsPng(element: HTMLElement, backgroundColor =
     pixelRatio: 3,
     quality: 0.92,
     backgroundColor,
+    cacheBust: true,
   });
   const link = document.createElement("a");
   link.download = "collage.jpg";
